@@ -8,7 +8,7 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
     rp.status(200).send({
       intro: 'Welcome to XO Anime - Novels.',
 
-      routes: ['/:query', '/info', '/read'],
+      routes: ['/novels/:query', '/novels/info', '/novels/read'],
     });
   });
 

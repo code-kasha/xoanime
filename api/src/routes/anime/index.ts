@@ -9,15 +9,15 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
     rp.status(200).send({
       intro: 'Welcome to XO Anime - Anime',
       routes: [
-        '/:query',
-        '/info/:id',
-        '/watch/:episodeId',
-        '/genre/:genre',
-        '/genre/list',
-        '/top-airing',
-        '/movies',
-        '/popular',
-        '/recent-episodes',
+        '/anime/:query',
+        '/anime/info/:id',
+        '/anime/watch/:episodeId',
+        '/anime/genre/:genre',
+        '/anime/genre/list',
+        '/anime/top-airing',
+        '/anime/movies',
+        '/anime/popular',
+        '/anime/recent-episodes',
       ],
     });
   });

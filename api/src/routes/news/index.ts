@@ -7,7 +7,7 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
   fastify.get('/', (_, rp) => {
     rp.status(200).send({
       intro: 'Welcome to XO Anime - News.',
-      routes: ['/recent-feeds', '/info'],
+      routes: ['/news/recent-feeds', '/news/info'],
     });
   });
 

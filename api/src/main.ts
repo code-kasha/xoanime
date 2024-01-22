@@ -31,7 +31,15 @@ import chalk from 'chalk';
 
   try {
     fastify.get('/', (_, rp) => {
-      rp.status(200).send(`Welcome to XO Anime api! 🎉 `);
+      rp.status(200).send({
+        intro: `Welcome to XO Anime - API.`,
+        routes: [
+          '/anime - Powered by Gogoanime @ https://anitaku.to',
+          '/manga - Powered by Mangasee123 @ https://mangasee123.com',
+          '/news - Powered by Anime News Network @ https://animenewsnetwork.com',
+          '/novels - Powered by Read Light Novels @ https://animedaily.net/',
+        ],
+      });
     });
     fastify.get('*', (request, reply) => {
       reply.status(404).send({
