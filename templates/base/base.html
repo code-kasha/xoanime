@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>{% block title %}{% endblock title %}</title>
+
+	<link rel="shortcut icon" href="{% static 'icons/favicon.ico' %}" type="image/x-icon">
+	<link rel="stylesheet" href="{% static 'styles/styles.css' %}">
+
+	{% block styles %}{% endblock styles %}
+</head>
+
+<body>
+	<header>
+		<h1>Welcome</h1>
+		<nav>
+			<form action="{% url 'novels:search' %}">
+				<input type="text" name="query" {% if request.get_search_query %} value="{{request.get_search_query}}"
+					{% endif %} required>
+				<button type="submit">Go</button>
+			</form>
+		</nav>
+	</header>
+
+	<main>
+		{% block content %}{% endblock content %}
+	</main>
+
+	<footer>
+		Akash Damle, 2024.
+	</footer>
+
+	<script src="{% static 'scripts/app.js' %}"></script>
+	{% block scripts %}{% endblock scripts %}
+</body>
+
+</html>

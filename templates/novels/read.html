@@ -1,0 +1,20 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Read
+{% endblock title %}
+
+{% block content %}
+
+{{request.get_links.novelTitle}}
+
+<hr>
+{{request.get_links.chapterTitle}}
+
+
+{% comment %}{{request.get_links.text|safe}}{% endcomment %}
+<br>
+{{request.get_previous}}
+<br>
+{{request.get_next}}
+{% endblock content %}

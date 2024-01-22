@@ -1,0 +1,27 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+{% if request.get_search_query %}
+{{request.get_search_query}} |
+{% endif %}
+Search Results
+{% endblock title %}
+
+{% block content %}
+
+<p>You Searched for: {{request.get_search_query}}</p>
+
+<div class="">
+	{% for result in request.get_search_results.results %}
+	<div>
+		<p class='title'>{{result.title}}</p>
+		<img src="{{result.image}}" alt="{{result.id}}-image">
+		<a href="{% url 'novels:details' %}?id={{result.id}}">Details</a>
+
+
+	</div>
+	<hr>
+	{% endfor %}
+</div>
+
+{% endblock content %}

@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "kashaa"
+version = "0.1.0"
+description = "Anime"
+authors = ["Akash Damle <akash.damle@outlook.com>"]
+license = "ISC"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.1"
+django-allauth = "^0.60.1"
+django-extensions = "^3.2.3"
+requests = "^2.31.0"
+
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "^7.0.0"
+black = "^23.12.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

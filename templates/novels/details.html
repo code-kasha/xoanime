@@ -1,0 +1,40 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Novel Details
+{% endblock title %}
+
+{% block content %}
+
+<div class="">
+	<h3>{{request.get_details.title}}</h3>
+</div>
+
+<div class="">
+	<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image">
+</div>
+
+{% if request.get_now_playing %}
+<a href="{% url 'novels:read' %}?id={{request.get_now_playing}}">Read</a>
+{% endif %}
+
+<div class="">
+	<p>Author: {{request.get_details.author}}</p>
+	<p>Genres: {{request.get_details.genres}}</p>
+	<p>Rating: {{request.get_details.rating}}</p>
+	<p>Views: {{request.get_details.views}}</p>
+	<p>Description: {{request.get_details.description|safe}}</p>
+	<p>Status: {{request.get_details.status}}</p>
+	<p>Pages: {{request.get_details.pages}}</p>
+</div>
+
+
+
+<div class="">
+	{% for chapter in request.get_details.chapters %}
+	<p>{{chapter.title}} - <a href="{% url 'novels:read' %}?id={{chapter.id}}">Read</a></p>
+	{% endfor %}
+</div>
+
+
+{% endblock content %}
