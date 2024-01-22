@@ -5,13 +5,13 @@ import FastifyCors from '@fastify/cors';
 
 import anime from './routes/anime';
 import manga from './routes/manga';
-import lightnovels from './routes/light-novels';
+import novels from './routes/novels';
 import news from './routes/news';
 
 import chalk from 'chalk';
 
 (async () => {
-  const PORT = Number(process.env.PORT) || 3000;
+  const PORT = Number(process.env.PORT);
 
   const fastify = Fastify({
     maxParamLength: 1000,
@@ -26,7 +26,7 @@ import chalk from 'chalk';
 
   await fastify.register(anime, { prefix: '/anime' });
   await fastify.register(manga, { prefix: '/manga' });
-  await fastify.register(lightnovels, { prefix: '/light-novels' });
+  await fastify.register(novels, { prefix: '/novels' });
   await fastify.register(news, { prefix: '/news' });
 
   try {

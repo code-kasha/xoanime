@@ -1,14 +1,45 @@
 import { FastifyRequest, FastifyReply, FastifyInstance, RegisterOptions } from 'fastify';
-
-import ann from './ann';
+import { NEWS, Topics } from '@consumet/extensions';
 
 const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
-  // register news routes
-  fastify.register(ann, { prefix: '/ann' });
+  const ann = new NEWS.ANN();
 
-  //default route message
-  fastify.get('/', async (_request: FastifyRequest, reply: FastifyReply) => {
-    reply.status(200).send('Welcome to XO News');
+  fastify.get('/', (_, rp) => {
+    rp.status(200).send({
+      intro: 'Welcome to XO Anime - News.',
+      routes: ['/recent-feeds', '/info'],
+    });
+  });
+
+  fastify.get('/recent-feeds', async (req: FastifyRequest, reply: FastifyReply) => {
+    let { topic } = req.query as { topic?: Topics };
+
+    try {
+      const feeds = await ann.fetchNewsFeeds(topic);
+      reply.status(200).send(feeds);
+    } catch (e) {
+      reply.status(500).send({
+        message: (e as Error).message,
+      });
+    }
+  });
+
+  fastify.get('/info', async (req: FastifyRequest, reply: FastifyReply) => {
+    const { id } = req.query as { id: string };
+
+    if (typeof id === 'undefined')
+      return reply.status(400).send({
+        message: 'id is required',
+      });
+
+    try {
+      const info = await ann.fetchNewsInfo(id);
+      reply.status(200).send(info);
+    } catch (error) {
+      reply.status(500).send({
+        message: (error as Error).message,
+      });
+    }
   });
 };
 

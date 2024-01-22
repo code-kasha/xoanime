@@ -7,14 +7,21 @@ Read
 {% block content %}
 
 {{request.get_links.novelTitle}}
+<br>
+{{request.get_links.chapterTitle}}
+<br>
+<div class="">
+	{% if request.get_previous %}
+	<a href="{% url 'novels:read' %}?id={{request.get_previous.id}}">Previous Chapter</a>
+	{% endif %}
+
+	{% if request.get_next %}
+	<a href="{% url 'novels:read' %}?id={{request.get_next.id}}">Next Chapter</a>
+	{% endif %}
+</div>
 
 <hr>
-{{request.get_links.chapterTitle}}
+{{request.get_links.text|linebreaks|safe}}
 
 
-{% comment %}{{request.get_links.text|safe}}{% endcomment %}
-<br>
-{{request.get_previous}}
-<br>
-{{request.get_next}}
 {% endblock content %}

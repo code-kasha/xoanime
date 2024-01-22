@@ -1,12 +1,13 @@
 import { FastifyRequest, FastifyReply, FastifyInstance, RegisterOptions } from 'fastify';
-import { MANGA } from '@consumet/extensions';
+import { LIGHT_NOVELS } from '@consumet/extensions';
 
 const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
-  const mangasee123 = new MANGA.Mangasee123();
+  const readlightnovels = new LIGHT_NOVELS.ReadLightNovels();
 
   fastify.get('/', (_, rp) => {
     rp.status(200).send({
-      intro: `Welcome to the mangasee123 provider: check out the provider's website @ ${mangasee123.toString.baseUrl}`,
+      intro: 'Welcome to XO Anime - Novels.',
+
       routes: ['/:query', '/info', '/read'],
     });
   });
@@ -15,7 +16,7 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
   fastify.get('/:query', async (request: FastifyRequest, reply: FastifyReply) => {
     const query = (request.params as { query: string }).query;
 
-    const res = await mangasee123.search(query);
+    const res = await readlightnovels.search(query);
 
     reply.status(200).send(res);
   });
@@ -23,13 +24,17 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
   // Details
   fastify.get('/info', async (request: FastifyRequest, reply: FastifyReply) => {
     const id = (request.query as { id: string }).id;
+    const chapterPage = (request.query as { chapterPage: number }).chapterPage;
 
-    if (typeof id === 'undefined')
-      return reply.status(400).send({ message: 'id is required' });
+    if (typeof id === 'undefined') {
+      return reply.status(400).send({
+        message: 'id is required',
+      });
+    }
 
     try {
-      const res = await mangasee123
-        .fetchMangaInfo(id)
+      const res = await readlightnovels
+        .fetchLightNovelInfo(id, chapterPage)
         .catch((err) => reply.status(404).send({ message: err }));
 
       reply.status(200).send(res);
@@ -44,13 +49,16 @@ const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
   fastify.get('/read', async (request: FastifyRequest, reply: FastifyReply) => {
     const chapterId = (request.query as { chapterId: string }).chapterId;
 
-    if (typeof chapterId === 'undefined')
-      return reply.status(400).send({ message: 'chapterId is required' });
+    if (typeof chapterId === 'undefined') {
+      return reply.status(400).send({
+        message: 'chapterId is required',
+      });
+    }
 
     try {
-      const res = await mangasee123
-        .fetchChapterPages(chapterId)
-        .catch((err: Error) => reply.status(404).send({ message: err.message }));
+      const res = await readlightnovels
+        .fetchChapterContent(chapterId)
+        .catch((err) => reply.status(404).send(err));
 
       reply.status(200).send(res);
     } catch (err) {

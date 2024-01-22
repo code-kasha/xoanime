@@ -1,45 +1,62 @@
 import { FastifyRequest, FastifyReply, FastifyInstance, RegisterOptions } from 'fastify';
-import { PROVIDERS_LIST } from '@consumet/extensions';
-
-import mangadex from './mangadex';
-import mangasee123 from './mangasee123';
+import { MANGA } from '@consumet/extensions';
 
 const routes = async (fastify: FastifyInstance, options: RegisterOptions) => {
-  await fastify.register(mangadex, { prefix: '/mangadex' });
-  await fastify.register(mangasee123, { prefix: '/mangasee123' });
+  const mangasee123 = new MANGA.Mangasee123();
 
-  fastify.get('/', async (request: any, reply: any) => {
-    reply.status(200).send('Welcome to XO Manga');
+  fastify.get('/', (_, rp) => {
+    rp.status(200).send({
+      intro: `Welcome to XO Anime - Manga.`,
+      routes: ['/:query', '/info', '/read'],
+    });
   });
 
-  fastify.get('/:mangaProvider', async (request: FastifyRequest, reply: FastifyReply) => {
-    const queries: { mangaProvider: string; page: number } = {
-      mangaProvider: '',
-      page: 1,
-    };
+  // Search
+  fastify.get('/:query', async (request: FastifyRequest, reply: FastifyReply) => {
+    const query = (request.params as { query: string }).query;
 
-    queries.mangaProvider = decodeURIComponent(
-      (request.params as { mangaProvider: string; page: number }).mangaProvider,
-    );
+    const res = await mangasee123.search(query);
 
-    queries.page = (request.query as { mangaProvider: string; page: number }).page;
+    reply.status(200).send(res);
+  });
 
-    if (queries.page! < 1) queries.page = 1;
+  // Details
+  fastify.get('/info', async (request: FastifyRequest, reply: FastifyReply) => {
+    const id = (request.query as { id: string }).id;
 
-    const provider = PROVIDERS_LIST.MANGA.find(
-      (provider: any) => provider.toString.name === queries.mangaProvider,
-    );
+    if (typeof id === 'undefined')
+      return reply.status(400).send({ message: 'id is required' });
 
     try {
-      if (provider) {
-        reply.redirect(`/manga/${provider.toString.name}`);
-      } else {
-        reply
-          .status(404)
-          .send({ message: 'Page not found, please check the provider list.' });
-      }
+      const res = await mangasee123
+        .fetchMangaInfo(id)
+        .catch((err) => reply.status(404).send({ message: err }));
+
+      reply.status(200).send(res);
     } catch (err) {
-      reply.status(500).send('Something went wrong. Please try again later.');
+      reply
+        .status(500)
+        .send({ message: 'Something went wrong. Please try again later.' });
+    }
+  });
+
+  // Read
+  fastify.get('/read', async (request: FastifyRequest, reply: FastifyReply) => {
+    const chapterId = (request.query as { chapterId: string }).chapterId;
+
+    if (typeof chapterId === 'undefined')
+      return reply.status(400).send({ message: 'chapterId is required' });
+
+    try {
+      const res = await mangasee123
+        .fetchChapterPages(chapterId)
+        .catch((err: Error) => reply.status(404).send({ message: err.message }));
+
+      reply.status(200).send(res);
+    } catch (err) {
+      reply
+        .status(500)
+        .send({ message: 'Something went wrong. Please try again later.' });
     }
   });
 };
