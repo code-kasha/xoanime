@@ -1,4 +1,4 @@
 from django.urls import path
-from apps.anime import views
+from apps.news import views
 
 urlpatterns = []

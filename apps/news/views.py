@@ -5,13 +5,9 @@ from django.shortcuts import render, redirect
 from django.views.generic import View
 
 
-class SearchView(View):
+class FeedsView(View):
     pass
 
 
-class DetailsView(View):
-    pass
-
-
-class ReadView(View):
+class FeedDetails(View):
     pass
