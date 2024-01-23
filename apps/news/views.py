@@ -6,8 +6,10 @@ from django.views.generic import View
 
 
 class FeedsView(View):
-    pass
+    def get(self, request):
+        pass
 
 
 class FeedDetails(View):
-    pass
+    def get(self, request):
+        pass

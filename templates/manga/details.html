@@ -1,0 +1,59 @@
+{% extends "base/base.html" %}
+
+{% load filters %}
+
+{% block title %}
+{{request.get_details.title}} | Details
+{% endblock title %}
+
+{% block content %}
+
+<div class="">
+	<h3>{{request.get_now_playing}}</h3>
+</div>
+
+<div class="">
+	<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image">
+</div>
+
+<p>Alternative Titles:
+	{% for title in request.get_details.altTitles %}
+	{% if forloop.last %}
+	{{title}}.
+	{% else %}
+	{{title}},&nbsp;
+	{% endif %}
+	{% endfor %}
+</p>
+
+<br>
+
+<p>Genres:&nbsp;
+	{% for genre in request.get_details.genres %}
+	{% if forloop.last %}
+	{{genre}}.
+	{% else %}
+	{{genre}},&nbsp;
+	{% endif %}
+	{% endfor %}
+</p>
+
+<br>
+
+<p>Description&nbsp;{{request.get_details.description|safe}}</p>
+
+<a href="{% url 'manga:read' %}?id={{request.get_now_playing}}">Read</a>
+
+
+{% for chapter in request.get_details.chapters reversed %}
+<p>
+	{% if chapter.title %}
+	{{ chapter.title }}
+	{% else %}
+	Chapter: {{ chapter.id|get_last_part }}
+	{% endif %}
+	- <a href="{% url 'manga:read' %}?id={{ chapter.id }}">Read</a>
+</p>
+{% endfor %}
+
+{% endblock content %}

@@ -16,7 +16,7 @@ Search Results
 	<div>
 		<p class='title'>{{result.title}}</p>
 		<img src="{{result.image}}" alt="{{result.id}}-image">
-		<a href="{% url 'novels:details' %}?id={{result.id}}">Details</a>
+		<a href="{% url 'manga:details' %}?id={{result.id}}">Details</a>
 	</div>
 	<hr>
 	{% endfor %}

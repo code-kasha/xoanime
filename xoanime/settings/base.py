@@ -11,8 +11,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     # "apps.accounts",
+    "apps.anime",
     "apps.core",
-    # "apps.novels",
+    "apps.manga",
+    "apps.novels",
     "apps.utils",
 ]
 

@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 from apps.utils.helpers.fetch import fetch
 
-BASE_URL = "http://localhost:3000/light-novels/readlightnovels/"
+BASE_URL = "http://localhost:3000/novels/"
 
 
 class SearchView(View):
@@ -152,6 +152,7 @@ class DetailsView(View):
         request.set_item(item)
         request.set_details(result)
         request.set_now_playing(item_id)
+        request.set_links({})
 
     def process(self, request, id):
         """

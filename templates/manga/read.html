@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+Read
+{% endblock title %}
+
+{% block content %}
+
+<div class="">
+	{% if request.get_previous %}
+	<a href="{% url 'manga:read' %}?id={{request.get_previous.id}}">Previous Chapter</a>
+	{% endif %}
+
+	{% if request.get_next %}
+	<a href="{% url 'manga:read' %}?id={{request.get_next.id}}">Next Chapter</a>
+	{% endif %}
+</div>
+
+<hr>
+{{request.get_details.title}}
+{{request.get_details.genres}}
+
+<hr>
+
+<div class="">
+	{% for page in request.get_links %}
+	<div class="">
+		<img src="{{page.img}}" alt="{{request.get_now_playing}}-page{{page.page}}">
+		<p>{{page.page}}</p>
+	</div>
+	{% endfor %}
+</div>
+
+
+
+{% endblock content %}
