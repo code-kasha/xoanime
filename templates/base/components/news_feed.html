@@ -1,0 +1,11 @@
+{% if request.get_news_feed %}
+<button id="toggle-feed">Toggle News Feed</button>
+<div id="feed" class="hidden">
+	<ul>
+		{% for item in request.get_news_feed %}
+		<li>{{item.title}} - {{item.uploadedAt}} - {{item.topics}} - <a
+				href="{% url 'news:details' %}?id={{item.id}}">Details</a></li>
+		{% endfor %}
+	</ul>
+</div>
+{% endif %}

@@ -27,3 +27,7 @@ main{
 footer{
 	background-color: turquoise;
 }
+
+.hidden{
+	display: none;
+}

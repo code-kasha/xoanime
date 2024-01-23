@@ -12,6 +12,7 @@ class XOSessionMiddleware(SessionMiddleware):
             "data": {
                 "id": "",
                 "details": {},
+                "feed": [],
                 "items": [],
                 "item": {},
                 "now_playing": "",
@@ -83,6 +84,10 @@ class XOSessionMiddleware(SessionMiddleware):
         # Next
         request.get_next = lambda: self.get_session_value(request, "next")
         request.set_next = lambda value: self.set_session_value(request, "next", value)
+
+        # News Feed
+        request.get_news_feed = lambda: self.get_data(request, "feed")
+        request.set_news_feed = lambda value: self.set_data(request, "feed", value)
 
         return super().__call__(request)
 
