@@ -10,13 +10,18 @@ class XOSessionMiddleware(SessionMiddleware):
             "search_results": {},
             "provider": "",
             "data": {
-                "id": "",
                 "details": {},
                 "feed": [],
-                "items": [],
+                "id": "",
                 "item": {},
-                "now_playing": "",
+                "items": [],
                 "links": {},
+                "movies": {},
+                "now_playing": "",
+                "popular": {},
+                "recent": {},
+                "top": {},
+                "type": "",
             },
             "previous": {},
             "next": {},
@@ -88,6 +93,26 @@ class XOSessionMiddleware(SessionMiddleware):
         # News Feed
         request.get_news_feed = lambda: self.get_data(request, "feed")
         request.set_news_feed = lambda value: self.set_data(request, "feed", value)
+
+        # Recent
+        request.get_recent = lambda: self.get_data(request, "recent")
+        request.set_recent = lambda value: self.set_data(request, "recent", value)
+
+        # Top
+        request.get_top = lambda: self.get_data(request, "top")
+        request.set_top = lambda value: self.set_data(request, "top", value)
+
+        # Popular
+        request.get_popular = lambda: self.get_data(request, "popular")
+        request.set_popular = lambda value: self.set_data(request, "popular", value)
+
+        # Movies
+        request.get_movies = lambda: self.get_data(request, "movies")
+        request.set_movies = lambda value: self.set_data(request, "movies", value)
+
+        # Type
+        request.get_type = lambda: self.get_data(request, "type")
+        request.set_type = lambda value: self.set_data(request, "type", value)
 
         return super().__call__(request)
 

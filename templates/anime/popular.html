@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+
+{% block title %}Popular Anime{% endblock title %}
+
+{% block content %}
+
+{% if request.get_popular.currentPage|add:"0" > 1 %}
+<a href="{% url 'anime:popular' %}?page={{request.get_popular.currentPage|add:-1}}">Previous</a>
+{% endif %}
+
+{% if request.get_popular.hasNextPage %}
+<a href="{% url 'anime:popular' %}?page={{request.get_popular.currentPage|add:1}}">Next</a>
+{% endif %}
+
+<div class="">
+	{% for result in request.get_popular.results %}
+	<div class="">
+		<img src="{{result.image}}" alt="{{result.id}}-image">
+		<a href="{% url 'anime:details' %}?id={{result.id}}">
+			<h4>{{result.title}}</h4>
+		</a>
+	</div>
+	<hr>
+	{% endfor %}
+</div>
+
+
+{% endblock content %}

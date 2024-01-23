@@ -1,0 +1,30 @@
+{% extends "base/base.html" %}
+
+{% block title %}Recent Episodes{% endblock title %}
+
+{% block content %}
+
+
+
+{% if request.get_recent.currentPage|add:"0" > 1 %}
+<a href="{% url 'anime:recent' %}?page={{request.get_recent.currentPage|add:-1}}&type={{request.get_type}}">Previous</a>
+{% endif %}
+
+{% if request.get_recent.hasNextPage %}
+<a href="{% url 'anime:recent' %}?page={{request.get_recent.currentPage|add:1}}&type={{request.get_type}}">Next</a>
+{% endif %}
+
+<div class="">
+	{% for result in request.get_recent.results %}
+	<div class="">
+		<img src="{{result.image}}" alt="{{result.id}}-image">
+		<a href="{% url 'anime:details' %}?id={{result.id}}">
+			<h4>{{result.title}}</h4>
+		</a>
+	</div>
+	<hr>
+	{% endfor %}
+</div>
+
+
+{% endblock content %}

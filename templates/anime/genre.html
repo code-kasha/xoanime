@@ -1,24 +1,22 @@
 {% extends "base/base.html" %}
 
-{% block title %}Search Results{% endblock title %}
+{% block title %}Genre {{request.get_search_query}}{% endblock title %}
 
 {% block content %}
 
 
-<p>You searched for: {{request.get_search_query}}</p>
-
 {% if request.get_search_results.currentPage|add:"0" > 1 %}
 <a
-	href="{% url 'anime:search' %}?query={{request.get_search_query}}&page={{request.get_search_results.currentPage|add:-1}}">Previous</a>
+	href="{% url 'anime:genre' %}?slug={{request.get_search_query}}&page={{request.get_search_results.currentPage|add:-1}}">Previous</a>
 {% endif %}
 
 {% if request.get_search_results.hasNextPage %}
 <a
-	href="{% url 'anime:search' %}?query={{request.get_search_query}}&page={{request.get_search_results.currentPage|add:1}}">Next</a>
+	href="{% url 'anime:genre' %}?slug={{request.get_search_query}}&page={{request.get_search_results.currentPage|add:1}}">Next</a>
 {% endif %}
 
 
-<p>Results</p>
+
 <br>
 <div class="">
 	{% for result in request.get_search_results.results %}
@@ -26,7 +24,7 @@
 		<img src="{{result.image}}" alt="{{result.id}}-image">
 		<a href="{% url 'anime:details' %}?id={{result.id}}">
 			<h4>{{result.title}}</h4>
-			<p>{{result.releaseDate}} - Type: {{result.subOrDub|capfirst}}</p>
+			<p>Released: {{result.released}}</p>
 		</a>
 	</div>
 	<hr>
