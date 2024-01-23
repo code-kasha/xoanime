@@ -23,8 +23,7 @@
 				<input type="text" name="query" {% if request.get_search_query %} value="{{request.get_search_query}}"
 					{% endif %} required>
 				<select name="provider" required>
-					{% comment %}<option value="anime" {% if request.get_provider == "anime" %}selected{% endif %}>Anime
-					</option>{% endcomment %}
+					<option value="anime" {% if request.get_provider == "anime" %}selected{% endif %}>Anime</option>
 					<option value="manga" {% if request.get_provider == "manga" %}selected{% endif %}>Manga</option>
 					<option value="novels" {% if request.get_provider == "novels" %}selected{% endif %}>Novels</option>
 				</select>

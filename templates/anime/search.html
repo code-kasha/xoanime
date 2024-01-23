@@ -1,0 +1,26 @@
+{% extends "base/base.html" %}
+
+{% block title %}Search Results{% endblock title %}
+
+{% block content %}
+
+
+<p>You searched for: {{request.get_search_query}}</p>
+
+<p>Results</p>
+<br>
+<div class="">
+	{% for result in request.get_search_results.results %}
+	<div class="">
+		<img src="{{result.image}}" alt="{{result.id}}-image">
+		<a href="{% url 'anime:details' %}?id={{result.id}}">
+			<h4>{{result.title}}</h4>
+			<p>{{result.releaseDate}} - Type: {{result.subOrDub|capfirst}}</p>
+		</a>
+	</div>
+	<hr>
+	{% endfor %}
+</div>
+
+
+{% endblock content %}

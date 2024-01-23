@@ -1,0 +1,36 @@
+{% extends "base/base.html" %}
+
+{% block title %}Watch{% endblock title %}
+
+{% block content %}
+
+{{request.get_links}}
+
+
+<p>Image</p>
+<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image">
+
+<p>Title: {{request.get_details.title}}</p>
+<p>Alternative: {{request.get_details.otherName}}</p>
+
+<p>{{request.get_details.description|safe}}</p>
+
+<br>
+
+<p>Genres: {{request.get_details.genres}}</p>
+
+<p>Total Episodes: {{request.get_details.totalEpisodes}}</p>
+
+<p>Release Date: {{request.get_details.releaseDate}}</p>
+
+<p>Status: {{request.get_details.status}}</p>
+
+<p>Type: {{request.get_details.subOrDub|capfirst}} - {{request.get_details.type}}</p>
+
+<br>
+
+{% for item in request.get_items %}
+<p><a href="{% url 'anime:watch' %}?id={{item.id}}">Episode {{item.number}}</a></p>
+{% endfor %}
+
+{% endblock content %}
