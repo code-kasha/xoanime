@@ -1,14 +1,27 @@
 {% extends "base/base.html" %}
+{% load static %}
 
 {% block title %}Watch{% endblock title %}
 
+{% block styles %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.css"
+	integrity="sha512-yexU9hwne3MaLL2PG+YJDhaySS9NWcj6z7MvUDSoMhwNghPgXgcvYgVhfj4FMYpPh1Of7bt8/RK5A0rQ9fPMOw=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock styles %}
+
 {% block content %}
 
-{{request.get_links}}
-
-
+<video id="video" class="w-full h-full aspect-video" data-poster="{{request.get_data.image}}">
+	{% for source in request.get_links.sources %}
+	{% if "default" in source.quality %}
+	<source src="{{source.url}}" type="application/x-mpegURL" id="default-source" />
+	{% elif "backup" in source.quality %}
+	<source src="{{source.url}}" type="application/x-mpegURL" id="backup-source" />
+	{% endif %}
+	{% endfor %}
+</video>
 <p>Image</p>
-<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image">
+<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image" data-type="image">
 
 <p>Title: {{request.get_details.title}}</p>
 <p>Alternative: {{request.get_details.otherName}}</p>
@@ -34,3 +47,13 @@
 {% endfor %}
 
 {% endblock content %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.1/hls.min.js"
+	integrity="sha512-nIbvrKaS3WYCpXgsIqmXOFHrYNWmzQv+F93zKt3VqPTdQrdIyosYL3OvIuG6sRpEGCH6K6r+rtiwmOSmwHl1uQ=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plyr/3.7.8/plyr.min.js"
+	integrity="sha512-vONptKEoKbP1gaC5UkbYDa9OPr04ur4bxaaqT7DAJxGHB2oogtseCPrl5e5hPFokGYotlGNV4d+GM593ka7iNA=="
+	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'scripts/player.js' %}"></script>
+{% endblock scripts %}

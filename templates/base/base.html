@@ -42,6 +42,11 @@
 		Akash Damle, 2024.
 	</footer>
 
+	<script>
+		const imagePlaceholder = "{% static 'images/placeholder.jpg' %}"
+		const nowPlaying = "{{request.get_now_playing}}"
+	</script>
+
 	<script src="{% static 'scripts/app.js' %}"></script>
 	{% block scripts %}{% endblock scripts %}
 </body>

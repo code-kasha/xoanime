@@ -15,7 +15,7 @@
 <div class="">
 	{% for result in request.get_top.results %}
 	<div class="">
-		<img src="{{result.image}}" alt="{{result.id}}-image">
+		<img src="{{result.image}}" alt="{{result.id}}-image" data-type="image">
 		<a href="{% url 'anime:details' %}?id={{result.id}}">
 			<h4>{{result.title}}</h4>
 		</a>

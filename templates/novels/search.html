@@ -15,7 +15,7 @@ Search Results
 	{% for result in request.get_search_results.results %}
 	<div>
 		<p class='title'>{{result.title}}</p>
-		<img src="{{result.image}}" alt="{{result.id}}-image">
+		<img src="{{result.image}}" alt="{{result.id}}-image" data-type="image">
 		<a href="{% url 'novels:details' %}?id={{result.id}}">Details</a>
 	</div>
 	<hr>

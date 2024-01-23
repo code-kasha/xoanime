@@ -25,7 +25,7 @@ Read
 <div class="">
 	{% for page in request.get_links %}
 	<div class="">
-		<img src="{{page.img}}" alt="{{request.get_now_playing}}-page{{page.page}}">
+		<img src="{{page.img}}" alt="{{request.get_now_playing}}-page{{page.page}}" data-type="image">
 		<p>{{page.page}}</p>
 	</div>
 	{% endfor %}
