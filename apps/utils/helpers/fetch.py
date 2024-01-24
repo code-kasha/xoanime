@@ -8,6 +8,7 @@ CODES = [204, 301, 302, 307, 400, 404, 500]
 
 
 def fetch(request, url):
+    print("fetching")
     try:
         response = requests.get(url, allow_redirects=False)
         if response.status_code not in CODES:

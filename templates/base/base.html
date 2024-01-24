@@ -12,24 +12,15 @@
 	<link rel="shortcut icon" href="{% static 'icons/favicon.ico' %}" type="image/x-icon">
 	<link rel="stylesheet" href="{% static 'styles/styles.css' %}">
 
+
+	<script src="https://cdn.tailwindcss.com"></script>
 	{% block styles %}{% endblock styles %}
 </head>
 
 <body>
 	<header>
-		<h1>Welcome</h1>
-		<nav>
-			<form action="{% url 'search' %}">
-				<input type="text" name="query" {% if request.get_search_query %} value="{{request.get_search_query}}"
-					{% endif %} required>
-				<select name="provider" required>
-					<option value="anime" {% if request.get_provider == "anime" %}selected{% endif %}>Anime</option>
-					<option value="manga" {% if request.get_provider == "manga" %}selected{% endif %}>Manga</option>
-					<option value="novels" {% if request.get_provider == "novels" %}selected{% endif %}>Novels</option>
-				</select>
-				<button type="submit">Go</button>
-			</form>
-		</nav>
+
+		{% include "base/components/navbar.html" %}
 
 		{% include "base/components/news_feed.html" %}
 	</header>

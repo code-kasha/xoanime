@@ -1,33 +1,8 @@
-* {
-	margin: 0;
-	
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-
-body{
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-}
-
-nav{
-	background-color: greenyellow;
-	padding: 3px;
-}
-
-header{
-	background-color: aquamarine;
-}
-
-main{
-	background-color: yellowgreen;
-	flex: 1;
-}
-
-footer{
-	background-color: turquoise;
-}
-
-.hidden{
-	display: none;
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

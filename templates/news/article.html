@@ -4,6 +4,20 @@
 
 {% block content %}
 
-{{data}}
+
+<p>{{data.title}}</p>
+
+<p>{{data.uploadedAt}}</p>
+
+<p>{{data.intro|safe}}</p>
+
+<p>{{data.description|safe}}</p>
+
+<img src="{{data.thumbnail}}" />
+
+
+<p>Check on <a href="{{data.url}}">Anime News Network</a></p>
+
+
 
 {% endblock content %}

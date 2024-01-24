@@ -1,0 +1,32 @@
+<nav>
+	<ul class="bg-gray-200 flex justify-around mx-auto py-3 items-center">
+		<div class="">
+			<a href="{% url 'index' %}">Site</a>
+		</div>
+		<li class="flex justify-around">
+			<div class="rounded-r-md">
+				<form action="{% url 'search' %}" class="flex space-x-1">
+					<input type="text" name="query" {% if request.get_search_query %}
+						value="{{request.get_search_query}}" {% endif %} required class="rounded-lg w-full p-1">
+					<select name="provider" required class="p-1 rounded-lg text-center">
+						<option value="anime" {% if request.get_provider == "anime" %}selected{% endif %}>Anime</option>
+						<option value="manga" {% if request.get_provider == "manga" %}selected{% endif %}>Manga</option>
+						<option value="novels" {% if request.get_provider == "novels" %}selected{% endif %}>Novels
+						</option>
+					</select>
+					<button type="submit" class="bg-blue-300 p-1 rounded-md">Go</button>
+				</form>
+			</div>
+		</li>
+		<li class="hidden md:flex justify-around bg-red-200 w-1/2">
+			<a href="{% url 'anime:recent' %}">Recent</a>
+			<a href="{% url 'anime:top' %}">Top</a>
+			<a href="{% url 'anime:popular' %}">Popular</a>
+			<a href="{% url 'anime:movies' %}">Movies</a>
+			{% comment %}<a href="{% url 'anime:genre' %}">Genres</a>{% endcomment %}
+		</li>
+		<li class="bg-green-300">
+			<button>Login</button>
+		</li>
+	</ul>
+</nav>

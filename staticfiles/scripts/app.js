@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
   handleToggle("toggle-feed", "feed")
+  handleToggle("toggle-chapter-list", "chapter-list")
+  readerActions()
+  batchEpisodes()
   setupCache()
+  scrollIntoView()
 
   function handleImageError() {
     if (imagePlaceholder) {
@@ -67,6 +71,53 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         loadImageAndCache(imageId, image.src, cachedImageUrls)
       })
+    }
+  }
+
+  function readerActions() {
+    const previousChapter = document.getElementById("previous-chapter")
+    const nextChapter = document.getElementById("next-chapter")
+
+    document.addEventListener("keyup", (event) => {
+      if (event.shiftKey) {
+        switch (event.key) {
+          case "ArrowLeft":
+            previousChapter.click()
+            break
+          case "ArrowRight":
+            nextChapter.click()
+            break
+        }
+      }
+    })
+  }
+
+  function batchEpisodes() {
+    var episodeContainer = document.querySelector(".episode-container")
+    var select = document.getElementById("groupRange")
+    var episodes = document.querySelectorAll(".episode-item")
+    if (select) {
+      select.addEventListener("change", function () {
+        var selectedRange = this.value.split("-")
+        var startRange = parseInt(selectedRange[0])
+        var endRange = parseInt(selectedRange[1])
+        episodes.forEach(function (episode) {
+          var episodeNumber = parseInt(episode.dataset.episodeNumber)
+          episode.style.display =
+            episodeNumber >= startRange && episodeNumber <= endRange
+              ? "block"
+              : "none"
+        })
+      })
+      select.dispatchEvent(new Event("change"))
+    }
+  }
+
+  function scrollIntoView() {
+    var selectedElement = document.querySelector(".current")
+
+    if (selectedElement) {
+      selectedElement.scrollIntoView({ behavior: "smooth" })
     }
   }
 })

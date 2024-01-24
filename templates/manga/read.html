@@ -1,32 +1,60 @@
 {% extends "base/base.html" %}
 
+{% load filters %}
+
 {% block title %}
 Read
 {% endblock title %}
 
 {% block content %}
 
-<div class="">
-	{% if request.get_previous %}
-	<a href="{% url 'manga:read' %}?id={{request.get_previous.id}}">Previous Chapter</a>
-	{% endif %}
+<div class="space-y-3">
+	<div class="space-y-2">
+		<p class="text-2xl text-center">{{request.get_details.title}}</p>
+		<p class="text-xl text-center">Chapter {{request.get_now_playing|get_last_part}}</p>
+	</div>
+	<div class="flex justify-around p-3">
+		{% if request.get_previous %}
+		<a href="{% url 'manga:read' %}?id={{request.get_previous.id}}" id="previous-chapter">Previous Chapter</a>
+		{% endif %}
 
-	{% if request.get_next %}
-	<a href="{% url 'manga:read' %}?id={{request.get_next.id}}">Next Chapter</a>
-	{% endif %}
+		{% if request.get_next %}
+		<a href="{% url 'manga:read' %}?id={{request.get_next.id}}" id="next-chapter">Next Chapter</a>
+		{% endif %}
+	</div>
+</div>
+<hr>
+
+<button class="fixed bottom-20 rounded-xl right-20 bg-gray-200 opacity-20 hover:opacity-100 p-2"
+	id="toggle-chapter-list">
+	<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+		class="w-8 h-8">
+		<path stroke-linecap="round" stroke-linejoin="round"
+			d="M3 4.5h14.25M3 9h9.75M3 13.5h5.25m5.25-.75L17.25 9m0 0L21 12.75M17.25 9v12" />
+	</svg>
+</button>
+
+<hr>
+
+{% if request.get_items %}
+<div class="hidden fixed" id="chapter-list">
+	<div class="grid grid-cols-6 gap-4 bg-red-300 p-4 mx-auto">
+		{% for item in request.get_items %}
+		<a href="{% url 'manga:read' %}?id={{item.id}}"
+			class="border rounded-xl px-2 text-center {% if item.id == request.get_now_playing %}bg-green-200{% endif %}">
+			Chapter
+			{{item.id|get_last_part}}</a>
+		{% endfor %}
+	</div>
 </div>
 
-<hr>
-{{request.get_details.title}}
-{{request.get_details.genres}}
+{% endif %}
 
-<hr>
-
-<div class="">
+<div class="container-lg bg-green-200">
 	{% for page in request.get_links %}
-	<div class="">
-		<img src="{{page.img}}" alt="{{request.get_now_playing}}-page{{page.page}}" data-type="image">
-		<p>{{page.page}}</p>
+	<div class="container mx-auto p-2">
+		<img src="{{page.img}}" alt="{{request.get_now_playing}}-page{{page.page}}" data-type="image" class="w-full">
+		<p class="text-sm text-center">Page: {{page.page}}</p>
 	</div>
 	{% endfor %}
 </div>

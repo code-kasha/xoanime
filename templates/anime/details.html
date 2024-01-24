@@ -1,33 +1,115 @@
 {% extends "base/base.html" %}
 
-{% block title %}{{request.get_details.title|capfirst}}{% endblock title %}
+{% load filters %}
+
+{% block title %}Anime | {{request.get_details.title|capfirst}} {% endblock title %}
 
 {% block content %}
 
-<p>Image</p>
-<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image" data-type="image">
+<div class="space-y-6">
 
-<p>Title: {{request.get_details.title}}</p>
-<p>Alternative: {{request.get_details.otherName}}</p>
+	{% comment %} Title {% endcomment %}
+	<p class="text-2xl text-center">{{request.get_details.title}}</p>
 
-<p>{{request.get_details.description|safe}}</p>
+	{% comment %} Content {% endcomment %}
+	<div class="flex space-y-2">
+		{% comment %} Info {% endcomment %}
+		<div class="w-1/4 space-y-3">
+			{% comment %} Image {% endcomment %}
+			{% if request.get_details.image %}
+			<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image" data-type="image"
+				class="w-1/2 mx-auto object-cover">
+			{% endif %}
 
-<br>
+			{% comment %} Language and Type {% endcomment %}
+			<div class="flex justify-center space-x-4">
+				{% if request.get_details.type %}
+				<p class="rounded-md border bg-cyan-300 p-1">
+					{{request.get_details.type}}
+				</p>
+				{% endif %}
+				{% if request.get_details.subOrDub %}
+				<p class="rounded-md border bg-yellow-200 p-1">
+					{{request.get_details.subOrDub|get_type}}
+				</p>
+				{% endif %}
+			</div>
 
-<p>Genres: {{request.get_details.genres}}</p>
+			{% comment %} Alternate Names {% endcomment %}
+			{% if request.get_details.otherName %}
+			{% with my_string=request.get_details.otherName %}
+			<div class="flex flex-col truncate mx-auto p-3 text-center space-y-0.5">
+				{% for item in my_string|split:"," %}
+				<p>{{ item }}</p>
+				{% endfor %}
+				{% endwith %}
+			</div>
+			{% endif %}
+		</div>
 
-<p>Total Episodes: {{request.get_details.totalEpisodes}}</p>
+		{% comment %} Details {% endcomment %}
+		<div class="flex-1">
+			<div class="w-10/12 mx-auto space-y-3">
+				{% comment %} Description {% endcomment %}
+				{% if request.get_details.description %}
+				<div class="text-justify">
+					{{request.get_details.description|safe}}
+				</div>
+				{% endif %}
+				{% comment %} Genres {% endcomment %}
+				{% if request.get_details.genres %}
+				<p>{% for genre in request.get_details.genres %} {% if forloop.last %} {{genre|capfirst}}.
+					{% else %} {{genre}}, {% endif %} {% endfor %}</p>
+				{% endif %}
+				{% comment %} Total Episodes {% endcomment %}
+				{% if request.get_details.totalEpisodes %}
+				<p>Total Episodes: {{request.get_details.totalEpisodes}}</p>
+				{% endif %}
+				{% comment %} Release Date {% endcomment %}
+				{% if request.get_details.releaseDate %}
+				<p>Release Date: {{request.get_details.releaseDate}}</p>
+				{% endif %}
+				{% comment %} Status {% endcomment %}
+				{% if request.get_details.status %}
+				<p>Status: {{request.get_details.status}}</p>
+				{% endif %}
+			</div>
+		</div>
+	</div>
 
-<p>Release Date: {{request.get_details.releaseDate}}</p>
+	{% comment %} Episodes {% endcomment %}
+	<div class="border border-gray-700 rounded-xl shadow-md shadow-gray-300 w-11/12 mx-auto">
+		{% if request.get_items|length > 100 %}
+		{% comment %} Episode Selector (Multiples of 100) {% endcomment %}
+		<div class="p-2 flex justify-end">
+			<select id="groupRange" class="p-1.5">
+				{% with length=request.get_items|length %}
+				{% for i in length|get_range %}
+				{% if i|is_multiple_of:100 %}
+				<option value="{{ i }}-{{ i|add:"99" }}" {% if forloop.first %}selected{% endif %}>
+					{{ i }}-{{ i|add:"99"|default:'' }}</option>
+				{% endif %}
+				{% endfor %}
+				{% endwith %}
+			</select>
+		</div>
+		{% endif %}
 
-<p>Status: {{request.get_details.status}}</p>
-
-<p>Type: {{request.get_details.subOrDub|capfirst}} - {{request.get_details.type}}</p>
-
-<br>
-
-{% for item in request.get_items %}
-<p><a href="{% url 'anime:watch' %}?id={{item.id}}">Episode {{item.number}}</a></p>
-{% endfor %}
+		{% comment %} List of Episodes {% endcomment %}
+		<div
+			class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 overflow-y-auto scroll-none overflow-x-hidden max-h-[360px] hide-scrollbar p-3 episode-container">
+			{% for item in request.get_items %}
+			<div class="episode-item" data-episode-number="{{ item.number }}">
+				<div class="p-1 text-justify border border-gray-400">
+					<a href="{% url 'anime:watch' %}?id={{item.id}}" class="flex justify-center">
+						<p class="flex justify-end">Episode</p>
+						<p class="text-center">&nbsp;{{item.number}}</p>
+					</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
 
 {% endblock content %}

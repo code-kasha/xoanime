@@ -1,5 +1,6 @@
 {% extends "base/base.html" %}
 {% load static %}
+{% load filters %}
 
 {% block title %}Watch{% endblock title %}
 
@@ -11,40 +12,79 @@
 
 {% block content %}
 
-<video id="video" class="w-full h-full aspect-video" data-poster="{{request.get_data.image}}">
-	{% for source in request.get_links.sources %}
-	{% if "default" in source.quality %}
-	<source src="{{source.url}}" type="application/x-mpegURL" id="default-source" />
-	{% elif "backup" in source.quality %}
-	<source src="{{source.url}}" type="application/x-mpegURL" id="backup-source" />
+<div class="space-y-3">
+
+	<p class="text-2xl text-center">{{request.get_details.title}}</p>
+	<p class="text-xl text-center">Episode - {{request.get_now_playing|get_last_part}}</p>
+
+	{% if request.get_links %}
+	<div class="w-3/4 mx-auto">
+		<video id="video" class="mx-auto aspect-video" data-poster="{{request.get_data.image}}">
+			{% for source in request.get_links.sources %}
+			{% if "default" in source.quality %}
+			<source src="{{source.url}}" type="application/x-mpegURL" id="default-source" />
+			{% elif "backup" in source.quality %}
+			<source src="{{source.url}}" type="application/x-mpegURL" id="backup-source" />
+			{% endif %}
+			{% endfor %}
+		</video>
+	</div>
+	{% else %}
+
+	<p>Content Unavailable.</p>
+
 	{% endif %}
-	{% endfor %}
-</video>
-<p>Image</p>
-<img src="{{request.get_details.image}}" alt="{{request.get_id}}-image" data-type="image">
 
-<p>Title: {{request.get_details.title}}</p>
-<p>Alternative: {{request.get_details.otherName}}</p>
 
-<p>{{request.get_details.description|safe}}</p>
+	<div class="w-3/4 mx-auto flex justify-around">
+		{% if request.get_previous %}
+		<a href="{% url 'anime:watch' %}?id={{request.get_previous.id}}" id="previous-episode"
+			data-action="fetch">Previous
+			Episode</a>
+		{% endif %}
 
-<br>
+		{% if request.get_next %}
+		<a href="{% url 'anime:watch' %}?id={{request.get_next.id}}" id="next-episode" data-action="fetch">Next
+			Episode</a>
+		{% endif %}
+	</div>
 
-<p>Genres: {{request.get_details.genres}}</p>
 
-<p>Total Episodes: {{request.get_details.totalEpisodes}}</p>
+	{% comment %} Episodes {% endcomment %}
+	<div class="border border-gray-700 rounded-xl shadow-md shadow-gray-300 w-3/4 mx-auto">
+		{% if request.get_items|length > 100 %}
+		{% comment %} Episode Selector (Multiples of 100) {% endcomment %}
+		<div class="p-2 flex justify-end">
+			<select id="groupRange" class="p-1.5">
+				{% with length=request.get_items|length %}
+				{% for i in length|get_range %}
+				{% if i|is_multiple_of:100 %}
+				<option value="{{ i }}-{{ i|add:"99" }}" {% if forloop.first %}selected{% endif %}>
+					{{ i }}-{{ i|add:"99"|default:'' }}</option>
+				{% endif %}
+				{% endfor %}
+				{% endwith %}
+			</select>
+		</div>
+		{% endif %}
 
-<p>Release Date: {{request.get_details.releaseDate}}</p>
-
-<p>Status: {{request.get_details.status}}</p>
-
-<p>Type: {{request.get_details.subOrDub|capfirst}} - {{request.get_details.type}}</p>
-
-<br>
-
-{% for item in request.get_items %}
-<p><a href="{% url 'anime:watch' %}?id={{item.id}}">Episode {{item.number}}</a></p>
-{% endfor %}
+		{% comment %} List of Episodes {% endcomment %}
+		<div
+			class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 overflow-y-auto scroll-none overflow-x-hidden max-h-[360px] hide-scrollbar p-3 episode-container">
+			{% for item in request.get_items %}
+			<div class="episode-item" data-episode-number="{{ item.number }}">
+				<div
+					class="p-1 text-justify border border-gray-400 {% if item.id == request.get_now_playing %}bg-gray-700 text-white current{% endif %}">
+					<a href="{% url 'anime:watch' %}?id={{item.id}}" class="flex justify-center">
+						<p class="flex justify-end">Episode</p>
+						<p class="text-center">&nbsp;{{item.number}}</p>
+					</a>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
 
 {% endblock content %}
 
