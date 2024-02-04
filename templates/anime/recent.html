@@ -4,8 +4,6 @@
 
 {% block content %}
 
-
-
 {% if request.get_recent.currentPage|add:"0" > 1 %}
 <a href="{% url 'anime:recent' %}?page={{request.get_recent.currentPage|add:-1}}&type={{request.get_type}}">Previous</a>
 {% endif %}
@@ -14,17 +12,19 @@
 <a href="{% url 'anime:recent' %}?page={{request.get_recent.currentPage|add:1}}&type={{request.get_type}}">Next</a>
 {% endif %}
 
-<div class="">
-	{% for result in request.get_recent.results %}
-	<div class="">
-		<img src="{{result.image}}" alt="{{result.id}}-image" data-type="image">
-		<a href="{% url 'anime:details' %}?id={{result.id}}">
-			<h4>{{result.title}}</h4>
-		</a>
+<div class="container mx-auto">
+	<div class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-2">
+		{% for result in request.get_recent.results %}
+		<div class="border mx-auto w-[240px]">
+			<a href="{% url 'anime:details' %}?id={{result.id}}">
+				<img src="{{result.image}}" alt="{{result.id}}-image" data-type="image"
+					class="h-[320px] w-full object-cover mx-auto">
+			</a>
+			<h4 class="truncate items-center py-2 font-semibold mx-auto text-center w-10/12 p-1" data-action="truncate">
+				{{result.title}}</h4>
+		</div>
+		{% endfor %}
 	</div>
-	<hr>
-	{% endfor %}
 </div>
-
 
 {% endblock content %}

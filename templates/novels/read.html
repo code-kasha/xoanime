@@ -1,27 +1,30 @@
 {% extends "base/base.html" %}
 
+{% load filters %}
+
 {% block title %}
 Read
 {% endblock title %}
 
 {% block content %}
 
-{{request.get_links.novelTitle}}
-<br>
-{{request.get_links.chapterTitle}}
-<br>
-<div class="">
-	{% if request.get_previous %}
-	<a href="{% url 'novels:read' %}?id={{request.get_previous.id}}">Previous Chapter</a>
-	{% endif %}
+<p class="text-xl font-bold p-4 text-center">{{request.get_links.novelTitle|get_unique_part}}</p>
 
-	{% if request.get_next %}
-	<a href="{% url 'novels:read' %}?id={{request.get_next.id}}">Next Chapter</a>
-	{% endif %}
+<p class="text-lg p-4 text-center">{{request.get_links.chapterTitle}}</p>
+
+
+
+<div class="">
+	<div class="container mx-auto p-3">
+		</p>
+		<span class="flex w-2/3 mx-auto text-justify">
+			<p class="leading-7 text-gray-600">
+				{{request.get_links.text|linebreaksbr}}</p>
+		</span>
+	</div>
 </div>
 
-<hr>
-{{request.get_links.text|linebreaks|safe}}
 
+<button id="sidebar-menu-button" class="fixed right-10 bottom-10 p-2">Sidebar</button>
 
 {% endblock content %}

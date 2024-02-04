@@ -1,4 +1,5 @@
 from django import template
+from django.template.defaultfilters import stringfilter
 
 register = template.Library()
 
@@ -39,3 +40,16 @@ def is_multiple_of(value, arg):
 @register.filter
 def split(value, delimiter):
     return value.split(delimiter)
+
+
+@register.filter(name="get_unique_part")
+@stringfilter
+def get_unique_first_part(value, part=None):
+    parts = [
+        part.strip(" '\"") if part is not None else None for part in value.split("-")
+    ]
+
+    if part:
+        return parts[part]
+    else:
+        return value

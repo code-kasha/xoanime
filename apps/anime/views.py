@@ -166,10 +166,7 @@ class WatchView(View):
         links = request.get_links()
         now_playing = request.get_now_playing()
 
-        if items and not links:
-            self.get_links(request)
-
-        elif id != now_playing and items:
+        if items and not links or id != now_playing and items:
             current = next(
                 (item for item in items if item["id"] == id),
                 None,

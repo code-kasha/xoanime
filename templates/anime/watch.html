@@ -12,6 +12,8 @@
 
 {% block content %}
 
+<button id="sidebar-menu-button" class="fixed right-10 z-40 bottom-10 p-2">Sidebar</button>
+
 <div class="space-y-3">
 
 	<p class="text-2xl text-center">{{request.get_details.title}}</p>
@@ -34,56 +36,6 @@
 	<p>Content Unavailable.</p>
 
 	{% endif %}
-
-
-	<div class="w-3/4 mx-auto flex justify-around">
-		{% if request.get_previous %}
-		<a href="{% url 'anime:watch' %}?id={{request.get_previous.id}}" id="previous-episode"
-			data-action="fetch">Previous
-			Episode</a>
-		{% endif %}
-
-		{% if request.get_next %}
-		<a href="{% url 'anime:watch' %}?id={{request.get_next.id}}" id="next-episode" data-action="fetch">Next
-			Episode</a>
-		{% endif %}
-	</div>
-
-
-	{% comment %} Episodes {% endcomment %}
-	<div class="border border-gray-700 rounded-xl shadow-md shadow-gray-300 w-3/4 mx-auto">
-		{% if request.get_items|length > 100 %}
-		{% comment %} Episode Selector (Multiples of 100) {% endcomment %}
-		<div class="p-2 flex justify-end">
-			<select id="groupRange" class="p-1.5">
-				{% with length=request.get_items|length %}
-				{% for i in length|get_range %}
-				{% if i|is_multiple_of:100 %}
-				<option value="{{ i }}-{{ i|add:"99" }}" {% if forloop.first %}selected{% endif %}>
-					{{ i }}-{{ i|add:"99"|default:'' }}</option>
-				{% endif %}
-				{% endfor %}
-				{% endwith %}
-			</select>
-		</div>
-		{% endif %}
-
-		{% comment %} List of Episodes {% endcomment %}
-		<div
-			class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 overflow-y-auto scroll-none overflow-x-hidden max-h-[360px] hide-scrollbar p-3 episode-container">
-			{% for item in request.get_items %}
-			<div class="episode-item" data-episode-number="{{ item.number }}">
-				<div
-					class="p-1 text-justify border border-gray-400 {% if item.id == request.get_now_playing %}bg-gray-700 text-white current{% endif %}">
-					<a href="{% url 'anime:watch' %}?id={{item.id}}" class="flex justify-center">
-						<p class="flex justify-end">Episode</p>
-						<p class="text-center">&nbsp;{{item.number}}</p>
-					</a>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-	</div>
 </div>
 
 {% endblock content %}
@@ -96,4 +48,6 @@
 	integrity="sha512-vONptKEoKbP1gaC5UkbYDa9OPr04ur4bxaaqT7DAJxGHB2oogtseCPrl5e5hPFokGYotlGNV4d+GM593ka7iNA=="
 	crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="{% static 'scripts/player.js' %}"></script>
+
+
 {% endblock scripts %}

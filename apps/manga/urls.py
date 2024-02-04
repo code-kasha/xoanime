@@ -6,5 +6,5 @@ app_name = "manga"
 urlpatterns = [
     path("search", views.search, name="search"),
     path("details", views.details, name="details"),
-    path("read", views.read, name="read"),
+    # path("read", views.read, name="read"),
 ]

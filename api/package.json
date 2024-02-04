@@ -16,15 +16,14 @@
     "license": "MIT",
     "dependencies": {
         "@consumet/extensions": "github:consumet/consumet.ts",
-        "@fastify/cors": "^8.2.0",
+        "@fastify/cors": "^9.0.1",
         "@types/fastify-cors": "^2.1.0",
-        "@types/node": "^18.11.17",
-        "chalk": "4.1.2",
-        "dotenv": "^16.0.3",
-        "fastify": "^4.10.2"
+        "@types/node": "^20.11.16",
+        "dotenv": "^16.4.1",
+        "fastify": "^4.26.0"
     },
     "devDependencies": {
-        "nodemon": "3.0.1",
+        "nodemon": "3.0.3",
         "prettier": "^3.0.0"
     }
 }

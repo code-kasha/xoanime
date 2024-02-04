@@ -30,11 +30,6 @@ Novel Details
 
 
 
-<div class="">
-	{% for chapter in request.get_details.chapters %}
-	<p>{{chapter.title}} - <a href="{% url 'novels:read' %}?id={{chapter.id}}">Read</a></p>
-	{% endfor %}
-</div>
 
 
 {% endblock content %}

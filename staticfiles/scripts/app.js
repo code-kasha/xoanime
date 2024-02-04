@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   handleToggle("toggle-feed", "feed")
   handleToggle("toggle-chapter-list", "chapter-list")
+  handleToggle("sidebar-menu-button", "sidebar-menu")
+  handleTruncation()
   readerActions()
   batchEpisodes()
   setupCache()
@@ -87,20 +89,25 @@ document.addEventListener("DOMContentLoaded", () => {
           case "ArrowRight":
             nextChapter.click()
             break
+          case "ArrowUp":
+            break
+          case "ArrowDown":
+            break
         }
       }
     })
   }
 
   function batchEpisodes() {
-    var episodeContainer = document.querySelector(".episode-container")
     var select = document.getElementById("groupRange")
     var episodes = document.querySelectorAll(".episode-item")
+
     if (select) {
       select.addEventListener("change", function () {
         var selectedRange = this.value.split("-")
         var startRange = parseInt(selectedRange[0])
         var endRange = parseInt(selectedRange[1])
+
         episodes.forEach(function (episode) {
           var episodeNumber = parseInt(episode.dataset.episodeNumber)
           episode.style.display =
@@ -109,15 +116,27 @@ document.addEventListener("DOMContentLoaded", () => {
               : "none"
         })
       })
+
       select.dispatchEvent(new Event("change"))
     }
   }
 
   function scrollIntoView() {
-    var selectedElement = document.querySelector(".current")
+    var selectedElement = document.querySelector(
+      `[data-episode-id=${selectedItem.id}]`
+    )
 
     if (selectedElement) {
       selectedElement.scrollIntoView({ behavior: "smooth" })
     }
+  }
+
+  function handleTruncation() {
+    const items = document.querySelectorAll("[data-action=truncate]")
+    items.forEach((item) => {
+      item.addEventListener("click", () => {
+        item.classList.toggle("truncate")
+      })
+    })
   }
 })

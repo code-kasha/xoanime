@@ -17,25 +17,26 @@
 	{% block styles %}{% endblock styles %}
 </head>
 
-<body>
-	<header>
-
+<body class="flex flex-col h-screen">
+	<header class="flex flex-col">
 		{% include "base/components/navbar.html" %}
-
+		{% include "base/components/sidebar.html" %}
 		{% include "base/components/news_feed.html" %}
 	</header>
 
-	<main>
+	<main class="flex-1">
 		{% block content %}{% endblock content %}
 	</main>
 
-	<footer>
-		Akash Damle, 2024.
+	<footer class="p-5 w-full flex items-center mx-auto bg-green-300">
+		<p class="flex mx-auto text-center text-lg font-semibold">Akash Damle, 2024.</p>
 	</footer>
 
 	<script>
 		const imagePlaceholder = "{% static 'images/placeholder.jpg' %}"
 		const nowPlaying = "{{request.get_now_playing}}"
+		const selectedItem = "{{request.get_item|safe}}"
+		const pages = "{{request.get_links}}"
 	</script>
 
 	<script src="{% static 'scripts/app.js' %}"></script>

@@ -200,98 +200,98 @@ class DetailsView(View):
 details = DetailsView.as_view()
 
 
-class ReadView(View):
-    """
-    View for reading chapters of a manga.
+# class ReadView(View):
+#    """
+#    View for reading chapters of a manga.
 
-    Methods:
-        get_data(request):
-            Retrieve relevant data from the request, including the chapter ID, items, now playing chapter, and links.
+#    Methods:
+#        get_data(request):
+#            Retrieve relevant data from the request, including the chapter ID, items, now playing chapter, and links.
 
-        process(request, id, items):
-            Process the chapter request, fetching the chapter content and updating request attributes accordingly.
+#        process(request, id, items):
+#            Process the chapter request, fetching the chapter content and updating request attributes accordingly.
 
-        get(request):
-            Handle GET requests for reading chapters and render the 'novels/read.html' template.
-    """
+#        get(request):
+#            Handle GET requests for reading chapters and render the 'novels/read.html' template.
+#    """
 
-    def get_data(self, request):
-        """
-        Retrieve relevant data from the request.
+#    def get_data(self, request):
+#        """
+#        Retrieve relevant data from the request.
 
-        Args:
-            request (HttpRequest): The HTTP request object containing chapter-related information.
+#        Args:
+#            request (HttpRequest): The HTTP request object containing chapter-related information.
 
-        Returns:
-            tuple: A tuple containing the chapter ID (str), items (list), now playing chapter (str), and links (dict).
-        """
-        return (
-            request.GET.get("id"),
-            request.get_items(),
-            request.get_now_playing(),
-            request.get_links(),
-        )
+#        Returns:
+#            tuple: A tuple containing the chapter ID (str), items (list), now playing chapter (str), and links (dict).
+#        """
+#        return (
+#            request.GET.get("id"),
+#            request.get_items(),
+#            request.get_now_playing(),
+#            request.get_links(),
+#        )
 
-    def process(self, request, id, items):
-        """
-        Process the chapter request, fetching the chapter content and updating request attributes accordingly.
+#    def process(self, request, id, items):
+#        """
+#        Process the chapter request, fetching the chapter content and updating request attributes accordingly.
 
-        Args:
-            request (HttpRequest): The HTTP request object containing chapter-related information.
-            id (str): The ID of the requested chapter.
-            items (list): List of available chapters.
-        """
-        url = BASE_URL + f"read?chapterId={id}"
+#        Args:
+#            request (HttpRequest): The HTTP request object containing chapter-related information.
+#            id (str): The ID of the requested chapter.
+#            items (list): List of available chapters.
+#        """
+#        url = BASE_URL + f"read?chapterId={id}"
 
-        current = next(
-            (item for item in items if item["id"] == id),
-            None,
-        )
+#        current = next(
+#            (item for item in items if item["id"] == id),
+#            None,
+#        )
 
-        if current:
-            result = fetch(request, url)
-            if result:
-                request.set_links(result)
-            else:
-                request.set_links({})
+#        if current:
+#            result = fetch(request, url)
+#            if result:
+#                request.set_links(result)
+#            else:
+#                request.set_links({})
 
-            current_ep = None
-            for index, item in enumerate(items):
-                if item["id"] == current["id"]:
-                    current_ep = index
-                    break
+#            current_ep = None
+#            for index, item in enumerate(items):
+#                if item["id"] == current["id"]:
+#                    current_ep = index
+#                    break
 
-            previous_ep = (
-                items[current_ep - 1]
-                if current_ep is not None and current_ep > 0
-                else None
-            )
+#            previous_ep = (
+#                items[current_ep - 1]
+#                if current_ep is not None and current_ep > 0
+#                else None
+#            )
 
-            next_ep = (
-                items[current_ep + 1]
-                if current_ep is not None and current_ep < len(items) - 1
-                else None
-            )
-            request.set_now_playing(current.get("id"))
-            request.set_previous(previous_ep)
-            request.set_next(next_ep)
+#            next_ep = (
+#                items[current_ep + 1]
+#                if current_ep is not None and current_ep < len(items) - 1
+#                else None
+#            )
+#            request.set_now_playing(current.get("id"))
+#            request.set_previous(previous_ep)
+#            request.set_next(next_ep)
 
-    def get(self, request):
-        """
-        Handle GET requests for reading chapters and render the 'novels/read.html' template.
+#    def get(self, request):
+#        """
+#        Handle GET requests for reading chapters and render the 'novels/read.html' template.
 
-        Args:
-            request (HttpRequest): The HTTP request object containing chapter-related information.
+#        Args:
+#            request (HttpRequest): The HTTP request object containing chapter-related information.
 
-        Returns:
-            HttpResponse: A response object rendering the 'novels/read.html' template.
-        """
-        id, items, now_playing, links = self.get_data(request)
+#        Returns:
+#            HttpResponse: A response object rendering the 'novels/read.html' template.
+#        """
+#        id, items, now_playing, links = self.get_data(request)
 
-        if items and (not links or id != now_playing):
-            self.process(request, id, items)
+#        if items and (not links or id != now_playing):
+#            self.process(request, id, items)
 
-        return render(request, "manga/read.html")
+#        return render(request, "manga/read.html")
 
 
-read = ReadView.as_view()
+# read = ReadView.as_view()

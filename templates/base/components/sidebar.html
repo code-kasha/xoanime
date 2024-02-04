@@ -1,0 +1,147 @@
+{% load filters %}
+
+<div id="sidebar-menu" class="hidden z-10 fixed w-10/12 sm:w-7/12 md:w-5/12 lg:w-4/12 xl:w-3/12 h-full bg-yellow-200">
+	<div class="flex flex-col justify-around min-h-full">
+		{% if request.get_details.chapters %}
+		<div class="">
+
+			<div class="border border-gray-700 rounded-xl pb-2 shadow-md shadow-gray-300 w-3/4 mx-auto">
+				{% if request.get_chapters|length > 100 %}
+				{% comment %} Episode Selector (Multiples of 100) {% endcomment %}
+				<div class="p-2 flex justify-center">
+					<input type="text" id="searchInput" disabled>
+					<select id="groupRange" class="p-1.5">
+						{% with length=request.get_chapters|length %}
+						{% for i in length|get_range %}
+						{% if i|is_multiple_of:100 %}
+						<option value="{{ i }}-{{ i|add:"99" }}" {% if forloop.first %}selected{% endif %}>
+							{{ i }}-{{ i|add:"99"|default:'' }}</option>
+						{% endif %}
+						{% endfor %}
+						{% endwith %}
+					</select>
+				</div>
+				{% endif %}
+
+				{% comment %} List of Chapters {% endcomment %}
+				<div
+					class="grid sm:grid-cols-2 gap-4 overflow-y-auto scroll-none overflow-x-hidden max-h-[540px] hide-scrollbar p-3 episode-container">
+					{% for item in request.get_details.chapters %}
+					<div class="episode-item" data-episode-number="{{ item.number }}">
+						<div class="p-1 text-justify border border-gray-400 {% if item.id == request.get_now_playing %}bg-gray-700 text-white current{% endif %}"
+							data-type="link">
+							<a href="{% url 'novels:read' %}?id={{item.id}} p-1">
+								<p class="flex justify-start truncate">{{item.title}}</p>
+							</a>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+
+		<div class="flex justify-around container mx-auto p-5">
+			{% if request.get_previous %}
+			<a href="{% url 'novels:read' %}?id={{request.get_previous.id}}">Previous Chapter</a>
+			{% endif %}
+
+			{% if request.get_next %}
+			<a href="{% url 'novels:read' %}?id={{request.get_next.id}}">Next Chapter</a>
+			{% endif %}
+		</div>
+
+	</div>
+	{% elif request.get_items %}
+	<div class="hidden p-4">
+		<div class="border border-gray-700 rounded-xl shadow-md shadow-gray-300 w-3/4 mx-auto">
+			{% if request.get_items|length > 100 %}
+			{% comment %} Episode Selector (Multiples of 100) {% endcomment %}
+			<div class="p-2 flex justify-center">
+				<input type="text" id="searchInput" disabled>
+				<select id="groupRange" class="p-1.5">
+					{% with length=request.get_items|length %}
+					{% for i in length|get_range %}
+					{% if i|is_multiple_of:100 %}
+					<option value="{{ i }}-{{ i|add:"99" }}" {% if forloop.first %}selected{% endif %}>
+						{{ i }}-{{ i|add:"99"|default:'' }}</option>
+					{% endif %}
+					{% endfor %}
+					{% endwith %}
+				</select>
+			</div>
+			{% endif %}
+
+			{% comment %} List of Episodes {% endcomment %}
+			<div
+				class="grid sm:grid-cols-2 gap-4 overflow-y-auto scroll-none overflow-x-hidden max-h-[540px] hide-scrollbar p-3 episode-container">
+				{% for item in request.get_items %}
+				<div class="episode-item" data-episode-number="{{ item.number }}">
+					<div class="p-1 text-justify border border-gray-400 {% if item.id == request.get_now_playing %}bg-gray-700 text-white current{% endif %}"
+						data-type="link">
+						<a href="{% url 'anime:watch' %}?id={{item.id}}" class="flex justify-center">
+							<p class="flex justify-end">Episode</p>
+							<p class="text-center">&nbsp;{{item.number}}</p>
+						</a>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<div class="mx-auto bg-green-300 p-1.5 w-full flex justify-around">
+		{% if request.get_previous %}
+		<a href="{% url 'anime:watch' %}?id={{request.get_previous.id}}" id="previous-episode"
+			data-action="fetch">Previous
+		</a>
+		{% endif %}
+
+		{% if request.get_next %}
+		<a href="{% url 'anime:watch' %}?id={{request.get_next.id}}" id="next-episode" data-action="fetch">Next
+		</a>
+		{% endif %}
+	</div>
+
+	{% endif %}
+</div>
+</div>
+
+{% block scripts %}
+
+<script>
+	const searchInput = document.getElementById('searchInput');
+	const episodeLinks = Array.from(document.querySelectorAll('[data-type=link]'));
+	const episodeNumbers = episodeLinks.map((link) => link.innerText.toLowerCase());
+
+	if (searchInput && episodeLinks && episodeNumbers) {
+
+		document.addEventListener('keydown', (event) => {
+			const key = event.key;
+			if (/^[0-9]$/.test(key) || key === 'Backspace') {
+				if (key === 'Backspace') {
+					searchInput.value = searchInput.value.slice(0, -1);
+				} else {
+					searchInput.value += key;
+				}
+				const inputEvent = new Event('input', {
+					bubbles: true
+				});
+				searchInput.dispatchEvent(inputEvent);
+			}
+		});
+
+		searchInput.addEventListener('input', () => {
+			const searchTerm = searchInput.value.toLowerCase();
+			episodeLinks.forEach((link, index) => {
+				const episodeNumber = episodeNumbers[index];
+				const episodeContainer = link.closest('.episode-item');
+
+				if (episodeNumber.includes(searchTerm)) {
+					episodeContainer.style.display = 'block';
+				} else {
+					episodeContainer.style.display = 'none';
+				}
+			});
+		});
+	}
+</script>
+{% endblock scripts %}

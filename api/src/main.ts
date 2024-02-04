@@ -8,8 +8,6 @@ import manga from './routes/manga';
 import novels from './routes/novels';
 import news from './routes/news';
 
-import chalk from 'chalk';
-
 (async () => {
   const PORT = Number(process.env.PORT);
 
@@ -22,7 +20,7 @@ import chalk from 'chalk';
     methods: 'GET',
   });
 
-  console.log(chalk.green(`Starting server on port ${PORT}... 🚀`));
+  console.log(`Starting server on port ${PORT}... 🚀`);
 
   await fastify.register(anime, { prefix: '/anime' });
   await fastify.register(manga, { prefix: '/manga' });

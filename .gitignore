@@ -6,3 +6,5 @@ middleware_full.py
 node_modules
 dist
 *.lock
+test.*
+test_*.*

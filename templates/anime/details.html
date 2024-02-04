@@ -58,7 +58,7 @@
 				{% endif %}
 				{% comment %} Genres {% endcomment %}
 				{% if request.get_details.genres %}
-				<p>{% for genre in request.get_details.genres %} {% if forloop.last %} {{genre|capfirst}}.
+				<p>{% for genre in request.get_details.genres %} Genres: {% if forloop.last %} {{genre|capfirst}}.
 					{% else %} {{genre}}, {% endif %} {% endfor %}</p>
 				{% endif %}
 				{% comment %} Total Episodes {% endcomment %}
@@ -78,6 +78,7 @@
 	</div>
 
 	{% comment %} Episodes {% endcomment %}
+	{% if request.get_items %}
 	<div class="border border-gray-700 rounded-xl shadow-md shadow-gray-300 w-11/12 mx-auto">
 		{% if request.get_items|length > 100 %}
 		{% comment %} Episode Selector (Multiples of 100) {% endcomment %}
@@ -110,6 +111,7 @@
 			{% endfor %}
 		</div>
 	</div>
+	{% endif %}
 </div>
 
 {% endblock content %}
